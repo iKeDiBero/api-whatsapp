@@ -1,61 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# WhatsApp API - Laravel Sanctum
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **API de WhatsApp con autenticación compartida usando Laravel Sanctum**
 
-## About Laravel
+Este proyecto es una API de WhatsApp desarrollada en Laravel que utiliza **autenticación compartida** con el proyecto `actec-admin-manager-api`. Ambas APIs comparten la misma base de datos y sistema de tokens, permitiendo que un usuario autenticado en una API pueda acceder a los recursos de la otra.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🔐 Autenticación Compartida
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Esta API **NO** tiene su propio sistema de autenticación. En su lugar, utiliza los tokens generados por [`actec-admin-manager-api`](https://github.com/iKeDiBero/actec-admin-manager-api) mediante Laravel Sanctum.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Cómo funciona:
+1. **Login**: El usuario se autentica en `actec-admin-manager-api`
+2. **Token**: Obtiene un token de acceso
+3. **Acceso**: Usa el mismo token para acceder a los endpoints de esta API
 
-## Learning Laravel
+## 🚀 Características
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- ✅ **Autenticación compartida** con `actec-admin-manager-api`
+- ✅ **Laravel Sanctum** para gestión de tokens
+- ✅ **Base de datos compartida** para usuarios y tokens
+- ✅ **Endpoints protegidos** para funcionalidades de WhatsApp
+- ✅ **Validación de requests** con Laravel Validation
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 📋 Requisitos
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- PHP >= 8.1
+- Laravel 11.x
+- MySQL/MariaDB
+- Composer
+- **Proyecto `actec-admin-manager-api` configurado y funcionando**
 
-## Laravel Sponsors
+## 🛠️ Instalación
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/iKeDiBero/whatsapp-api.git
+cd whatsapp-api
+```
 
-### Premium Partners
+### 2. Instalar dependencias
+```bash
+composer install
+npm install
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 3. Configurar variables de entorno
+```bash
+cp .env.example .env
+```
 
-## Contributing
+Configura las variables de base de datos **EXACTAMENTE IGUALES** a las de `actec-admin-manager-api`:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3305
+DB_DATABASE=sistemat_db_wsadministrador
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Generar clave de aplicación
+```bash
+php artisan key:generate
+```
 
-## Code of Conduct
+### 5. Levantar el servidor
+```bash
+php artisan serve --port=8001
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🔗 Endpoints Disponibles
 
-## Security Vulnerabilities
+### Endpoints Públicos
+- `GET /api/ping` - Verificar estado del servicio
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Endpoints Protegidos (requieren token de actec-admin-manager-api)
+- `GET /api/user` - Información del usuario autenticado
+- `GET /api/whatsapp/status` - Estado del servicio WhatsApp
+- `POST /api/whatsapp/send` - Enviar mensaje de WhatsApp
+- `GET /api/whatsapp/messages` - Obtener historial de mensajes
 
-## License
+## 🧪 Uso y Ejemplos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 1. Obtener token de autenticación
+```bash
+# En actec-admin-manager-api (puerto 8000)
+curl -X POST "http://localhost:8000/api/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "usuario@ejemplo.com", "password": "contraseña"}'
+```
+
+### 2. Usar el token en WhatsApp API
+```bash
+# Verificar estado del servicio
+curl -X GET "http://localhost:8001/api/whatsapp/status" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI"
+
+# Enviar mensaje
+curl -X POST "http://localhost:8001/api/whatsapp/send" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer TU_TOKEN_AQUI" \
+  -d '{"phone": "+1234567890", "message": "Hola desde WhatsApp API"}'
+```
+
+## ⚙️ Configuración de Autenticación Compartida
+
+Esta API está configurada para compartir autenticación con `actec-admin-manager-api` mediante:
+
+1. **Base de datos compartida**: Ambas APIs usan la misma base de datos
+2. **Tabla de usuarios compartida**: Acceden a la misma tabla `users`
+3. **Tokens Sanctum compartidos**: Los tokens se almacenan en `personal_access_tokens`
+4. **Middleware Sanctum**: Valida los tokens en ambas APIs
+
+## 🔒 Seguridad
+
+- ✅ Los tokens son validados contra la misma base de datos
+- ✅ La revocación de tokens afecta ambas APIs
+- ✅ Gestión centralizada de usuarios y permisos
+- ✅ Información sensible protegida con `.gitignore`
+
+## 🤝 APIs Relacionadas
+
+- [`actec-admin-manager-api`](https://github.com/iKeDiBero/actec-admin-manager-api) - API principal de administración
+
+## 📄 Licencia
+
+Este proyecto está bajo la licencia MIT.
