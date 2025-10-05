@@ -63,6 +63,26 @@ return [
             ]) : [],
         ],
 
+        'notifications' => [
+            'driver' => 'mysql',
+            'url' => env('NOTIFICATIONS_DB_URL'),
+            'host' => env('NOTIFICATIONS_DB_HOST', '127.0.0.1'),
+            'port' => env('NOTIFICATIONS_DB_PORT', '3306'),
+            'database' => env('NOTIFICATIONS_DB_DATABASE', 'sistemat_db_notifications'),
+            'username' => env('NOTIFICATIONS_DB_USERNAME', 'root'),
+            'password' => env('NOTIFICATIONS_DB_PASSWORD', ''),
+            'unix_socket' => env('NOTIFICATIONS_DB_SOCKET', ''),
+            'charset' => env('NOTIFICATIONS_DB_CHARSET', 'utf8mb4'),
+            'collation' => env('NOTIFICATIONS_DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
